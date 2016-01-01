@@ -30,8 +30,10 @@ func _process(delta):
 		if obstructions.has(str(obstruction.get_name())) == false:
 			obstructions[str(obstruction.get_name())] = obstruction
 			obstruction.hide()
+			status = "Hidden"
+			lab.set_text(status)
 		timer = 1.0
-		status = "Hidden"
+		
 	else:
 		timer -= delta
 		if timer <= 0:
@@ -39,6 +41,7 @@ func _process(delta):
 				obstructions[i].show()
 			obstructions.clear()
 			status = "Shown"
-	lab.set_text(status)
+			lab.set_text(status)
+	
 	
 	
