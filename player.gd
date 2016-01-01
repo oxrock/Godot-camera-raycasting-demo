@@ -4,10 +4,14 @@ extends KinematicBody
 # use keyboard arrow keys to move around scene
 var ray = null
 var obstruction = null
-var obstructions = []
+var obstructions = {}
+var lab = null
+var status = null
+var timer = 0
 
 func _ready():
 	ray = get_node("Camera/RayCast")
+	lab = get_parent().get_node("Label")
 	set_process(true)
 	
 func _process(delta):
@@ -23,11 +27,18 @@ func _process(delta):
 
 	if ray.is_enabled() and ray.is_colliding(): #For some reason referencing "ray" causes error
 		obstruction = get_node("Camera/RayCast").get_collider()
-		obstruction.hide()
-		obstructions.append(obstruction)
+		if obstructions.has(str(obstruction.get_name())) == false:
+			obstructions[str(obstruction.get_name())] = obstruction
+			obstruction.hide()
+		timer = 1.0
+		status = "Hidden"
 	else:
-		for i in obstructions:
-			i.show()
-		obstructions = []
+		timer -= delta
+		if timer <= 0:
+			for i in obstructions:
+				obstructions[i].show()
+			obstructions.clear()
+			status = "Shown"
+	lab.set_text(status)
 	
 	
