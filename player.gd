@@ -4,10 +4,8 @@ extends KinematicBody
 # use keyboard arrow keys to move around scene
 var ray = null
 var obstruction = null
-var obstructions = {}
 var lab = null
 var status = null
-var timer = 0
 var pos = null
 
 func _ready():
@@ -15,6 +13,7 @@ func _ready():
 	lab = get_parent().get_node("Label")
 	set_fixed_process(true)
 	pos = get_transform()
+	obstruction = get_parent().get_node("StaticBody/TestCube")
 	
 func _fixed_process(delta):
 	if Input.is_key_pressed(KEY_UP):
@@ -24,28 +23,18 @@ func _fixed_process(delta):
 		pos =get_transform()
 		move(pos.basis[2]*.25)
 	if Input.is_key_pressed(KEY_LEFT):
-		rotate_y( deg2rad( -75 * delta))
+		rotate_y( deg2rad( -125 * delta))
 	if Input.is_key_pressed(KEY_RIGHT):
-		rotate_y( deg2rad( 75 * delta))
+		rotate_y( deg2rad( 125 * delta))
 	
 
 	if ray.is_enabled() and ray.is_colliding(): 
-		obstruction = get_node("Camera/RayCast").get_collider()
-		if obstructions.has(str(obstruction.get_name())) == false:
-			obstructions[str(obstruction.get_name())] = obstruction
-			obstruction.hide()
-			status = "Hidden"
-			lab.set_text(status)
-		timer = 1.0
+		obstruction = ray.get_collider().get_node("TestCube")
+		status = "Hidden"
+		obstruction.hide()
+		lab.set_text(status)
 		
 	else:
-		timer -= delta
-		if timer <= 0:
-			for i in obstructions:
-				obstructions[i].show()
-			obstructions.clear()
-			status = "Shown"
-			lab.set_text(status)
-	
-	
-	
+		obstruction.show()
+		status = "Shown"
+		lab.set_text(status)
