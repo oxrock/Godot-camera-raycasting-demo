@@ -8,24 +8,28 @@ var obstructions = {}
 var lab = null
 var status = null
 var timer = 0
+var pos = null
 
 func _ready():
 	ray = get_node("Camera/RayCast")
 	lab = get_parent().get_node("Label")
-	set_process(true)
+	set_fixed_process(true)
+	pos = get_transform()
 	
-func _process(delta):
+func _fixed_process(delta):
 	if Input.is_key_pressed(KEY_UP):
-		self.translate(Vector3(0,0,-10 * delta))
+		pos =get_transform()
+		move(-pos.basis[2]*.25)
 	if Input.is_key_pressed(KEY_DOWN):
-		self.translate(Vector3(0,0,10 * delta))
+		pos =get_transform()
+		move(pos.basis[2]*.25)
 	if Input.is_key_pressed(KEY_LEFT):
-		self.rotate_y( deg2rad( -75 * delta))
+		rotate_y( deg2rad( -75 * delta))
 	if Input.is_key_pressed(KEY_RIGHT):
-		self.rotate_y( deg2rad( 75 * delta))
+		rotate_y( deg2rad( 75 * delta))
 	
 
-	if ray.is_enabled() and ray.is_colliding(): #For some reason referencing "ray" causes error
+	if ray.is_enabled() and ray.is_colliding(): 
 		obstruction = get_node("Camera/RayCast").get_collider()
 		if obstructions.has(str(obstruction.get_name())) == false:
 			obstructions[str(obstruction.get_name())] = obstruction
