@@ -1,6 +1,5 @@
 extends KinematicBody
 # This is a demo showcasing how to make camera obstructions temporarily transparent
-# you SHOULD be able to collide with the boxes, for some reason it is bugged currently. Change staticbodies to rigidbodies to enjoy smacking them around.
 # use keyboard arrow keys to move around scene
 var ray = null
 var obstruction = null
